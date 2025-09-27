@@ -1,0 +1,12 @@
+# .gitignore für das Loki-Projekt
+
+# Ignoriere die rohen und verarbeiteten Bilddaten, da sie zu groß sind
+data/raw/
+data/processed/
+
+# Ignoriere das trainierte Modell, da es groß sein kann
+models/loki_model.h5
+
+# Ignoriere Caches und generierte Python-Dateien
+__pycache__/
+*.pyc
