@@ -4,6 +4,11 @@
 
 Loki ist ein einfaches, aber funktionelles Projekt zur Bildklassifizierung. Es nutzt ein Convolutional Neural Network (CNN), um zu lernen, Bilder zu erkennen und zu klassifizieren. Dieses Projekt dient als praktischer Einstieg in die Welt des maschinellen Lernens und der künstlichen Intelligenz, insbesondere im Bereich der Computer Vision.
 
+
+### Projektablauf
+Hier ist das Aktivitätsdiagramm, das den Workflow des Projekts beschreibt.
+![Aktivitätsdiagramm des Loki-Projekts](Loki_UML.svg)
+
 Features
 
     Datensatzvorbereitung: Automatisiert das Laden und Vorverarbeiten von Bilddaten.
