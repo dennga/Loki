@@ -1,25 +1,53 @@
-# Loki: Learning Object Klassification Interface 🧠
+## Loki: Learning Object Classification Interface 🧠
+Overview
 
-Übersicht
+Loki is a full-stack image classification project that demonstrates a complete machine learning workflow, from data preprocessing to interactive web deployment. It utilizes a Convolutional Neural Network (CNN) to classify images into "cat" or "dog" categories.
 
-Loki ist ein einfaches, aber funktionelles Projekt zur Bildklassifizierung. Es nutzt ein Convolutional Neural Network (CNN), um zu lernen, Bilder zu erkennen und zu klassifizieren. Dieses Projekt dient als praktischer Einstieg in die Welt des maschinellen Lernens und der künstlichen Intelligenz, insbesondere im Bereich der Computer Vision.
+This project serves as a practical introduction to the world of machine learning, showcasing typical challenges and solutions such as combating overfitting and ensuring a consistent data pipeline. The final result is a modern, user-friendly web application capable of real-time predictions.
 
-
-### Projektablauf
-Hier ist das Aktivitätsdiagramm, das den Workflow des Projekts beschreibt.
 ![Aktivitätsdiagramm des Loki-Projekts](Loki_UML.svg)
 
-Features
 
-    Datensatzvorbereitung: Automatisiert das Laden und Vorverarbeiten von Bilddaten.
+Backend
 
-    Modelltraining: Erstellt und trainiert ein neuronales Netz für die Bildklassifizierung.
+    Data Preprocessing: A script (preprocess.py) automates the division of raw data into training and testing sets.
 
-    Vorhersage: Kann neue, unbekannte Bilder klassifizieren.
+    Model Training: A CNN is trained from scratch using TensorFlow and Keras (train.py). The training process was iteratively improved to minimize overfitting through data augmentation, dropout layers, and a fine-tuned learning rate.
 
-    Metriken: Zeigt die Genauigkeit und den Verlust des trainierten Modells an.
+    Consistent Normalization: A Rescaling layer is integrated directly into the model to guarantee consistent image preprocessing between training and application.
+
+    Model Evaluation: A script (evaluate.py) assesses the performance of the final, trained model on unseen test data.
+
+    REST API: An API created with Flask provides a /predict endpoint that processes image uploads and returns predictions in JSON format.
+
+Frontend
+
+    Modern User Interface: A clean, responsive frontend designed with Bootstrap 5.
+
+    Dynamic Interaction: Image uploads and result displays are handled asynchronously via the JavaScript (fetch API) without page reloads.
+
+    User Feedback: The application provides clear feedback during the analysis process and displays the final result, including a confidence score.
+
+Tech Stack
+
+    Backend: Python
+
+    Machine Learning: TensorFlow, Keras
+
+    Web Framework: Flask
+
+    Frontend: HTML5, CSS3, JavaScript (ES6+)
+
+    Styling: Bootstrap 5
+
+    Data Processing: NumPy
+
+Project Workflow & Insights
+
+The project's workflow followed an iterative process typical for machine learning applications. After an initial training run, the metrics showed significant overfitting. Through targeted measures such as data augmentation, dropout regularization, and adjusting the learning rate, the model's ability to generalize was significantly improved. A further challenge was ensuring a consistent data pipeline, which was solved by integrating a Rescaling layer directly into the model.
 
 
-Autor
+Author
 
 Dennis Garscha
+
