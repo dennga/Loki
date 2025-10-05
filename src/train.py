@@ -3,81 +3,59 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 import matplotlib.pyplot as plt
 
-# --- Robuste Pfade definieren ---
-# Annahme: Dieses Skript liegt im 'src'-Ordner
+# --- Pfade definieren ---
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 train_dir = os.path.join(project_root, 'data', 'processed', 'train')
 test_dir = os.path.join(project_root, 'data', 'processed', 'test')
-model_save_path = os.path.join(project_root, 'models', 'loki_model_v2.h5') # Version 2
-plot_save_path = os.path.join(project_root, 'models', 'training_history_v2.png') # Version 2
+# NEUE VERSION FÜR DAS MODELL
+model_save_path = os.path.join(project_root, 'models', 'loki_model_v3.h5') 
+plot_save_path = os.path.join(project_root, 'models', 'training_history_v3.png')
 
-# Sicherstellen, dass der "models"-Ordner existiert
 os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
 
 # 1. Datensatz laden
-print(f"Lade Trainingsdaten von: {train_dir}")
 train_ds = tf.keras.utils.image_dataset_from_directory(
-    train_dir,
-    image_size=(150, 150),
-    batch_size=32
-)
-
-print(f"Lade Testdaten von: {test_dir}")
+    train_dir, image_size=(150, 150), batch_size=32)
 test_ds = tf.keras.utils.image_dataset_from_directory(
-    test_dir,
-    image_size=(150, 150),
-    batch_size=32
-)
+    test_dir, image_size=(150, 150), batch_size=32)
 
-# 2. Modell erstellen (mit Anti-Overfitting-Techniken)
+# 2. Modell erstellen (mit Rescaling-Schicht)
 model = models.Sequential([
-    # --- NEU: Daten-Augmentierung als Teil des Modells ---
-    layers.RandomFlip("horizontal", input_shape=(150, 150, 3)),
+    # --- NEU: NORMALISIERUNGS-SCHICHT ALS ERSTE SCHICHT ---
+    layers.Rescaling(1./255, input_shape=(150, 150, 3)),
+    
+    # Daten-Augmentierung
+    layers.RandomFlip("horizontal"),
     layers.RandomRotation(0.1),
     layers.RandomZoom(0.1),
-    # ----------------------------------------------------
 
-    # Convolutional-Basis
+    # Convolutional-Basis (input_shape wird hier entfernt)
     layers.Conv2D(32, (3, 3), activation='relu'),
     layers.MaxPooling2D((2, 2)),
-
     layers.Conv2D(64, (3, 3), activation='relu'),
     layers.MaxPooling2D((2, 2)),
-    
     layers.Conv2D(128, (3, 3), activation='relu'),
     layers.MaxPooling2D((2, 2)),
-    
-    # --- NEU: Dropout zur Regularisierung ---
     layers.Dropout(0.25),
-    # ----------------------------------------
 
     # Klassifizierungs-Teil
     layers.Flatten(),
     layers.Dense(512, activation='relu'),
-    
-    # --- NEU: Stärkeres Dropout vor der finalen Schicht ---
     layers.Dropout(0.5),
-    # --------------------------------------------------
-    
     layers.Dense(1, activation='sigmoid')
 ])
 
 # 3. Modell kompilieren
-# Erstelle eine Instanz des Adam-Optimierers mit einer kleineren Lernrate
-optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001) # Standard ist 0.001
-
-# Übergebe den konfigurierten Optimierer an die compile-Funktion
-model.compile(optimizer=optimizer,
-              loss='binary_crossentropy',
-              metrics=['accuracy'])
+optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001)
+model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 model.summary()
 
-# 4. Modell trainieren (mit mehr Epochen)
-print("\n--- Starte optimiertes Modelltraining ---")
+# 4. Modell trainieren
+print("\n--- Starte optimiertes Modelltraining (Version 3) ---")
 history = model.fit(
     train_ds,
     validation_data=test_ds,
-    epochs=50  # --- NEU: Auf 50 erhöht Regulation gegen Overfitting  ---
+    epochs=50 
 )
 print("--- Modelltraining abgeschlossen ---\n")
 

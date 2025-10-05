@@ -3,20 +3,15 @@ import os
 
 # 1. Pfade definieren
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-model_path = os.path.join(project_root, 'models', 'loki_model.h5')
+model_path = os.path.join(project_root, 'models', 'loki_model_v3.h5')
 test_dir = os.path.join(project_root, 'data', 'processed', 'test')
 
 # 2. Modell und Daten laden
 print(f"Lade Modell von: {model_path}")
 model = tf.keras.models.load_model(model_path)
-
 print(f"Lade Testdaten von: {test_dir}")
 test_ds = tf.keras.utils.image_dataset_from_directory(
-    test_dir,
-    image_size=(150, 150),
-    batch_size=32,
-    shuffle=False
-)
+    test_dir, image_size=(150, 150), batch_size=32, shuffle=False)
 
 # 3. Modell bewerten
 print("\nBewerte das Modell mit den Testdaten...")
